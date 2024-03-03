@@ -1,0 +1,7 @@
+Metrics/BlockLength:
+  ExcludedMethods: ["describe", "context"]
+  Exclude:
+    - "spec/**/*"
+Metrics/MethodLength:
+  Max: 50
+  CountAsOne: ["array", "hash"]

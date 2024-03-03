@@ -1,0 +1,33 @@
+version: "3"
+
+services:
+  api:
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app:cached
+    environment:
+      - REDIS_URL=redis://redis:6379
+    env_file:
+      - .env
+    command: rackup config.ru -p 3000 -o 0.0.0.0
+    ports:
+      - "3000:3000"
+    depends_on:
+      - redis
+    networks:
+      - github-api
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+    command: redis-server --maxmemory 200mb --maxmemory-policy volatile-lru
+    networks:
+      - github-api
+
+networks:
+  github-api:
+    driver: bridge
